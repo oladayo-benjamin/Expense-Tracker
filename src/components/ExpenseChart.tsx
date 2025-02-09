@@ -1,17 +1,28 @@
-import React, { useState } from "react";
+import { FC, useState } from "react";
 import { Box, SimpleGrid, Input, Button, Text, HStack, VStack } from "@chakra-ui/react";
 import { Bar, Doughnut, PolarArea } from "react-chartjs-2";
 import 'chart.js/auto';
 
-const ExpenseChart = ({ expenses }) => {
-  const [budget, setBudget] = useState(1000);
-  const [newBudget, setNewBudget] = useState("");
+interface Expense {
+  id: number;
+  amount: number;
+  category: string;
+  date: string;
+}
+
+interface ExpenseChartProps {
+  expenses: Expense[];
+}
+
+const ExpenseChart: FC<ExpenseChartProps> = ({ expenses }) => {
+  const [budget, setBudget] = useState<number>(1000);
+  const [newBudget, setNewBudget] = useState<string>("");
 
   const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
   const availableBalance = budget - totalExpenses;
 
   const handleBudgetUpdate = () => {
-    if (newBudget.trim() && !isNaN(newBudget)) {
+    if (newBudget.trim() && !isNaN(Number(newBudget))) {
       setBudget(parseFloat(newBudget));
       setNewBudget("");
     }
@@ -21,19 +32,20 @@ const ExpenseChart = ({ expenses }) => {
     setBudget(0);
   };
 
-  const isWithinDays = (date, days) => new Date(date) >= new Date(Date.now() - days * 86400000);
+  const isWithinDays = (date: string, days: number) =>
+    new Date(date) >= new Date(Date.now() - days * 86400000);
 
   const dailyExpenses = expenses.filter(e => isWithinDays(e.date, 1));
   const weeklyExpenses = expenses.filter(e => isWithinDays(e.date, 7));
 
-  const groupByCategory = (data) => {
-    return data.reduce((acc, expense) => {
+  const groupByCategory = (data: Expense[]) => {
+    return data.reduce<Record<string, number>>((acc, expense) => {
       acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
       return acc;
     }, {});
   };
 
-  const generateChartData = (expenseList) => {
+  const generateChartData = (expenseList: Expense[]) => {
     const categoryData = groupByCategory(expenseList);
     return {
       labels: Object.keys(categoryData),
@@ -63,7 +75,7 @@ const ExpenseChart = ({ expenses }) => {
   };
 
   const barOptions = {
-    indexAxis: "y",
+    indexAxis: "y" as const,
     responsive: true,
     maintainAspectRatio: false,
     plugins: { legend: { display: false } },
@@ -72,10 +84,9 @@ const ExpenseChart = ({ expenses }) => {
 
   return (
     <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} p={4}>
-      <Box p={5} borderRadius="lg" boxShadow="md" bg="white" minHeight="300px" overflowX="auto">
+      <Box p={5} borderRadius="lg" boxShadow="md" bg="white">
         <Bar data={chartData} options={barOptions} />
       </Box>
-
       <Box p={5} borderRadius="lg" boxShadow="md" bg="white">
         <VStack spacing={4} align="stretch">
           <Text fontSize="lg" fontWeight="bold">Budget Management</Text>
@@ -89,14 +100,12 @@ const ExpenseChart = ({ expenses }) => {
           <Button colorScheme="red" variant="outline" onClick={handleBudgetDelete} width="full">Delete Budget</Button>
         </VStack>
       </Box>
-
-      <Box p={5} borderRadius="lg" boxShadow="md" bg="white" minHeight="300px" overflowX="auto">
-        <Text fontSize="lg" fontWeight="bold" mb={3}>Daily Expenses Breakdown</Text>
+      <Box p={5} borderRadius="lg" boxShadow="md" bg="white">
+        <Text fontSize="lg" fontWeight="bold">Daily Expenses Breakdown</Text>
         {dailyExpenses.length > 0 ? <Doughnut data={dailyDoughnutData} /> : <Text>No expenses today.</Text>}
       </Box>
-
-      <Box p={5} borderRadius="lg" boxShadow="md" bg="white" minHeight="300px" overflowX="auto">
-        <Text fontSize="lg" fontWeight="bold" mb={3}>Weekly Expenses Breakdown</Text>
+      <Box p={5} borderRadius="lg" boxShadow="md" bg="white">
+        <Text fontSize="lg" fontWeight="bold">Weekly Expenses Breakdown</Text>
         {weeklyExpenses.length > 0 ? <PolarArea data={weeklyPolarAreaData} /> : <Text>No expenses this week.</Text>}
       </Box>
     </SimpleGrid>

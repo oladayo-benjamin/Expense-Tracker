@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import { Box, Heading, Text, VStack, SimpleGrid } from "@chakra-ui/react";
 import { Pie, Bar } from "react-chartjs-2";
 import "chart.js/auto";

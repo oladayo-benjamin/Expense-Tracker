@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import { Box, Text, Stack, HStack, Badge, Icon, Button } from "@chakra-ui/react";
 import { FaShoppingCart, FaMoneyBillWave, FaUtensils, FaCar, FaRegFrown } from "react-icons/fa"; // Importing relevant icons
 import { Link } from "react-router-dom"; // Import Link for navigation

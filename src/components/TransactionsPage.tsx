@@ -1,4 +1,4 @@
-import React from "react";
+import { FC } from "react";
 import { Box, Heading, Stack, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom"; // For navigation
 
