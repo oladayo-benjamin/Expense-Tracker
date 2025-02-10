@@ -1,26 +1,38 @@
-import { FC } from "react";
 import { Box, Text, Stack, HStack, Badge, Icon, Button } from "@chakra-ui/react";
 import { FaShoppingCart, FaMoneyBillWave, FaUtensils, FaCar, FaRegFrown } from "react-icons/fa"; // Importing relevant icons
 import { Link } from "react-router-dom"; // Import Link for navigation
 
-const RecentTransactions = ({ expenses }) => {
+// Define types for the expenses prop
+interface Expense {
+  id: number;
+  description: string;
+  category: string;
+  amount: number;
+  date: string; // Assuming date is a string, adjust if necessary
+}
+
+interface RecentTransactionsProps {
+  expenses: Expense[];
+}
+
+const RecentTransactions: React.FC<RecentTransactionsProps> = ({ expenses }) => {
   // Ensure expenses is an array and fallback to an empty array if invalid
   const safeExpenses = Array.isArray(expenses) ? expenses : [];
 
   // Sort expenses by date in descending order (latest first)
-  const sortedExpenses = [...safeExpenses].sort((a, b) => new Date(b.date) - new Date(a.date));
+  const sortedExpenses = [...safeExpenses].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   // Get the 3 most recent transactions
   const recentTransactions = sortedExpenses.slice(0, 3);
 
   // Function to capitalize the first letter of the first word
-  const capitalizeFirstLetter = (str) => {
+  const capitalizeFirstLetter = (str: string) => {
     if (!str) return str;
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
 
   // Function to get the appropriate icon based on category
-  const getCategoryIcon = (category) => {
+  const getCategoryIcon = (category: string) => {
     switch (category) {
       case "Entertainment":
         return <Icon as={FaShoppingCart} color="blue.500" />;

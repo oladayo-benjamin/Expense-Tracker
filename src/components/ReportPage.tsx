@@ -1,10 +1,19 @@
-import { FC } from "react";
-import { Box, Heading, Text, VStack, SimpleGrid } from "@chakra-ui/react";
+import { Box, Heading, Text, SimpleGrid } from "@chakra-ui/react"; // Removed unused import VStack
 import { Pie, Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import { Link } from "react-router-dom";
 
-const ReportPage = ({ expenses }) => {
+// Define types for expenses prop
+interface Expense {
+  category: string;
+  amount: number;
+}
+
+interface ReportPageProps {
+  expenses: Expense[];
+}
+
+const ReportPage: React.FC<ReportPageProps> = ({ expenses }) => {
   if (!expenses || expenses.length === 0) {
     return (
       <Box p={5} textAlign="center">
@@ -14,7 +23,7 @@ const ReportPage = ({ expenses }) => {
   }
 
   // Grouping expenses by category
-  const categoryTotals = expenses.reduce((acc, expense) => {
+  const categoryTotals = expenses.reduce((acc: Record<string, number>, expense: Expense) => {
     acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
     return acc;
   }, {});
@@ -53,10 +62,9 @@ const ReportPage = ({ expenses }) => {
         </Box>
       </SimpleGrid>
       <Link to="/">
-      <Text color="blue.500" mt={4}>Back to Overview</Text>
-    </Link>
+        <Text color="blue.500" mt={4}>Back to Overview</Text>
+      </Link>
     </Box>
-    
   );
 };
 

@@ -3,6 +3,7 @@ import { Box, SimpleGrid, Input, Button, Text, HStack, VStack } from "@chakra-ui
 import { Bar, Doughnut, PolarArea } from "react-chartjs-2";
 import 'chart.js/auto';
 
+// Define Expense type consistently with date as string
 interface Expense {
   id: number;
   amount: number;
@@ -11,7 +12,7 @@ interface Expense {
 }
 
 interface ExpenseChartProps {
-  expenses: Expense[];
+  expenses: Expense[]; // Type expenses as an array of Expense
 }
 
 const ExpenseChart: FC<ExpenseChartProps> = ({ expenses }) => {
@@ -32,12 +33,14 @@ const ExpenseChart: FC<ExpenseChartProps> = ({ expenses }) => {
     setBudget(0);
   };
 
+  // Utility to check if the expense date is within a certain number of days
   const isWithinDays = (date: string, days: number) =>
     new Date(date) >= new Date(Date.now() - days * 86400000);
 
   const dailyExpenses = expenses.filter(e => isWithinDays(e.date, 1));
   const weeklyExpenses = expenses.filter(e => isWithinDays(e.date, 7));
 
+  // Group expenses by category
   const groupByCategory = (data: Expense[]) => {
     return data.reduce<Record<string, number>>((acc, expense) => {
       acc[expense.category] = (acc[expense.category] || 0) + expense.amount;

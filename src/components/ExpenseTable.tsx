@@ -3,7 +3,8 @@ import { Table, Thead, Tbody, Tr, Th, Td, Input, IconButton, Button, HStack } fr
 import { DeleteIcon, CheckIcon } from "@chakra-ui/icons";
 import { FaTruck, FaBolt, FaHome, FaWallet, FaBullhorn, FaShoppingCart } from "react-icons/fa";
 
-const categoryIcons = {
+// Icons for categories
+const categoryIcons: Record<string, React.ElementType> = {
   Rent: FaHome,
   "Electricity Bill": FaBolt,
   Utilities: FaBolt,
@@ -13,24 +14,37 @@ const categoryIcons = {
   Miscellaneous: FaShoppingCart,
 };
 
-const ExpenseTable = ({ expenses, updateExpense, deleteExpense }) => {
-  const [editingId, setEditingId] = useState(null);
-  const [newAmount, setNewAmount] = useState("");
+interface Expense {
+  id: number;
+  description: string;
+  category: string;
+  amount: number;
+}
 
-  const handleEdit = (id, amount) => {
+interface ExpenseTableProps {
+  expenses: Expense[];
+  updateExpense: (id: number, amount: number) => void;
+  deleteExpense: (id: number) => void;
+}
+
+const ExpenseTable: React.FC<ExpenseTableProps> = ({ expenses, updateExpense, deleteExpense }) => {
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [newAmount, setNewAmount] = useState<string>("");
+
+  const handleEdit = (id: number, amount: number) => {
     setEditingId(id);
-    setNewAmount(amount);
+    setNewAmount(amount.toString());
   };
 
-  const handleSave = (id) => {
-    if (!isNaN(newAmount) && newAmount !== "") {
+  const handleSave = (id: number) => {
+    if (!isNaN(Number(newAmount)) && newAmount !== "") {
       updateExpense(id, parseFloat(newAmount));
     }
     setEditingId(null);
   };
 
   // Function to capitalize the first letter of the first word in a string
-  const capitalizeFirstLetter = (text) => {
+  const capitalizeFirstLetter = (text: string) => {
     if (!text) return text;
     return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
   };
@@ -84,6 +98,7 @@ const ExpenseTable = ({ expenses, updateExpense, deleteExpense }) => {
                   colorScheme="red"
                   icon={<DeleteIcon />}
                   onClick={() => deleteExpense(expense.id)}
+                  aria-label="Delete expense" // Added aria-label here
                 />
               </Td>
             </Tr>

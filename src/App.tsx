@@ -12,6 +12,7 @@ import TransactionsPage from "./components/TransactionsPage";
 import ReportPage from "./components/ReportPage";
 import Footer from "./components/Footer";
 
+// Define Expense type consistently with `date` as a string
 interface Expense {
   id: number;
   description: string;
@@ -32,6 +33,7 @@ const theme = extendTheme({
 });
 
 const App: FC = () => {
+  // Initialize expenses state with consistent Expense type
   const [expenses, setExpenses] = useState<Expense[]>([
     { id: 1, description: "Advert", category: "Marketing", amount: 50, date: "2025-02-07T10:00:00Z" },
     { id: 2, description: "Salaries Paid", category: "Salary", amount: 2000, date: "2025-02-01T10:00:00Z" },
@@ -39,7 +41,15 @@ const App: FC = () => {
     { id: 4, description: "Dispatch", category: "Logistics", amount: 15, date: "2025-02-05T08:00:00Z" },
   ]);
 
-  const [showScroll, setShowScroll] = useState<boolean>(false);
+  // For demonstration, I'll assume `prevExpenses` is a hardcoded or fetched value
+  const prevExpenses = [
+    { amount: 2000 }, // Example data for previous expenses
+    { amount: 45 },
+    { amount: 25 },
+    { amount: 10 },
+  ];
+
+  const [showScroll, setShowScroll] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -53,16 +63,19 @@ const App: FC = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  // Function to add a new expense
   const addExpense = (expense: Expense) => {
     setExpenses([expense, ...expenses]);
   };
 
+  // Function to update an existing expense
   const updateExpense = (id: number, newAmount: number) => {
-    setExpenses(expenses.map(exp => (exp.id === id ? { ...exp, amount: newAmount } : exp)));
+    setExpenses(expenses.map((exp) => (exp.id === id ? { ...exp, amount: newAmount } : exp)));
   };
 
+  // Function to delete an expense
   const deleteExpense = (id: number) => {
-    setExpenses(expenses.filter(exp => exp.id !== id));
+    setExpenses(expenses.filter((exp) => exp.id !== id));
   };
 
   return (
@@ -72,7 +85,8 @@ const App: FC = () => {
           <Navbar />
           <Box p={5} maxW="800px" mx="auto">
             <Heading mb={4} textAlign="left" size="sm" mt="3">Financial Overview</Heading>
-            <Box><ExpenseStats expenses={expenses} /></Box>
+            {/* Pass both expenses and prevExpenses to ExpenseStats */}
+            <Box><ExpenseStats expenses={expenses} prevExpenses={prevExpenses} /></Box>
             <Heading mb={4} textAlign="left" size="sm" mt="3">Recent Transactions</Heading>
             <Box bg="white" p={5} borderRadius="lg" boxShadow="md" mt={4}><RecentTransactions expenses={expenses} /></Box>
             <Routes>

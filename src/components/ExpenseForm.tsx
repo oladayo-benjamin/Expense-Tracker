@@ -2,12 +2,13 @@ import { FC, useState } from "react";
 import { Input, Select, Button, Stack, Box, FormControl, FormLabel, HStack } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 
+// Define the Expense interface with date as a string
 interface Expense {
   id: number;
   amount: number;
   category: string;
   description: string;
-  date: Date;
+  date: string; // Update to string, as date is stored as a string
 }
 
 interface ExpenseFormProps {
@@ -19,16 +20,22 @@ const categories = [
 ];
 
 const ExpenseForm: FC<ExpenseFormProps> = ({ addExpense }) => {
-  const [amount, setAmount] = useState<string>("");
-  const [category, setCategory] = useState<string>(categories[0]);
-  const [description, setDescription] = useState<string>("");
-  const [customCategory, setCustomCategory] = useState<string>("");
+  const [amount, setAmount] = useState<string>(""); // amount as string for input handling
+  const [category, setCategory] = useState<string>(categories[0]); // default category
+  const [description, setDescription] = useState<string>(""); // description of the expense
+  const [customCategory, setCustomCategory] = useState<string>(""); // custom category, if any
 
   const handleSubmit = () => {
-    if (!amount || !description) return;
-    const expenseCategory = customCategory || category;
-    addExpense({ id: Date.now(), amount: parseFloat(amount), category: expenseCategory, description, date: new Date() });
-    setAmount("");
+    if (!amount || !description) return; // simple validation
+    const expenseCategory = customCategory || category; // use custom category if provided, otherwise default
+    addExpense({
+      id: Date.now(), // generate a unique id using timestamp
+      amount: parseFloat(amount), // convert the string input to number
+      category: expenseCategory, 
+      description,
+      date: new Date().toISOString(), // store date as ISO string
+    });
+    setAmount(""); // reset input fields
     setDescription("");
     setCustomCategory("");
   };
