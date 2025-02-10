@@ -76,10 +76,13 @@ const RecentTransactions: React.FC<RecentTransactionsProps> = ({ expenses }) => 
 
       {/* View All Button */}
       <Link to="/transactions">
-        <Button variant="link" colorScheme="blue" mt={4} width="full" textAlign="center">
-          View All Transactions
-        </Button>
-      </Link>
+  <Box display="flex" justifyContent="center">
+    <Button variant="solid" colorScheme="blue" mt={4} size="xs">
+      View All
+    </Button>
+  </Box>
+</Link>
+
     </Box>
   );
 };
