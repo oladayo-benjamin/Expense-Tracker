@@ -1,50 +1,40 @@
 import { Box, Text, Stack, HStack, Badge, Icon, Button } from "@chakra-ui/react";
-import { FaShoppingCart, FaMoneyBillWave, FaUtensils, FaCar, FaRegFrown } from "react-icons/fa"; // Importing relevant icons
-import { Link } from "react-router-dom"; // Import Link for navigation
+import { FaShoppingCart, FaMoneyBillWave, FaUtensils, FaCar, FaRegFrown } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
-// Define types for the expenses prop
 interface Expense {
   id: number;
   description: string;
   category: string;
   amount: number;
-  date: string; // Assuming date is a string, adjust if necessary
+  date: string;
 }
 
 interface RecentTransactionsProps {
   expenses: Expense[];
 }
 
+const categoryIcons: Record<string, React.ElementType> = {
+  Entertainment: FaShoppingCart,
+  Income: FaMoneyBillWave,
+  Food: FaUtensils,
+  Transport: FaCar,
+  
+};
+
 const RecentTransactions: React.FC<RecentTransactionsProps> = ({ expenses }) => {
-  // Ensure expenses is an array and fallback to an empty array if invalid
   const safeExpenses = Array.isArray(expenses) ? expenses : [];
-
-  // Sort expenses by date in descending order (latest first)
   const sortedExpenses = [...safeExpenses].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-
-  // Get the 3 most recent transactions
   const recentTransactions = sortedExpenses.slice(0, 3);
 
-  // Function to capitalize the first letter of the first word
   const capitalizeFirstLetter = (str: string) => {
     if (!str) return str;
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   };
 
-  // Function to get the appropriate icon based on category
   const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case "Entertainment":
-        return <Icon as={FaShoppingCart} color="blue.500" />;
-      case "Income":
-        return <Icon as={FaMoneyBillWave} color="green.500" />;
-      case "Food":
-        return <Icon as={FaUtensils} color="yellow.500" />;
-      case "Transport":
-        return <Icon as={FaCar} color="red.500" />;
-      default:
-        return <Icon as={FaMoneyBillWave} color="gray.500" />; // Default icon if no match
-    }
+    const IconComponent = categoryIcons[category] || FaMoneyBillWave;
+    return <Icon as={IconComponent} color="gray.500" />;
   };
 
   return (
@@ -53,15 +43,12 @@ const RecentTransactions: React.FC<RecentTransactionsProps> = ({ expenses }) => 
         <Stack spacing={3}>
           {recentTransactions.map((expense) => (
             <HStack key={expense.id} justify="flex-start" align="center" spacing={3}>
-              {/* Category Icon */}
               {getCategoryIcon(expense.category)}
-
-              {/* Description and Amount */}
               <Text fontSize="md" flex="1" noOfLines={1}>
-                {capitalizeFirstLetter(expense.description)} {/* Capitalizing description */}
+                {capitalizeFirstLetter(expense.description)}
               </Text>
               <HStack spacing={2}>
-                <Badge colorScheme="green">{capitalizeFirstLetter(expense.category)}</Badge> {/* Capitalizing category */}
+                <Badge colorScheme="green">{capitalizeFirstLetter(expense.category)}</Badge>
                 <Text fontSize="lg" fontWeight="bold">${expense.amount.toFixed(2)}</Text>
               </HStack>
             </HStack>
@@ -73,18 +60,30 @@ const RecentTransactions: React.FC<RecentTransactionsProps> = ({ expenses }) => 
           <Text color="gray.500">No recent transactions. Start adding your expenses!</Text>
         </HStack>
       )}
-
-      {/* View All Button */}
-      <Link to="/transactions">
-  <Box display="flex" justifyContent="center">
-    <Button variant="solid" colorScheme="blue" mt={4} size="xs">
-      View All
-    </Button>
-  </Box>
-</Link>
-
+      <Link to="/Tra">
+        <Box display="flex" justifyContent="center">
+          <Button variant="solid" colorScheme="blue" mt={4} size="xs">
+            View All
+          </Button>
+        </Box>
+      </Link>
     </Box>
   );
 };
 
 export default RecentTransactions;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

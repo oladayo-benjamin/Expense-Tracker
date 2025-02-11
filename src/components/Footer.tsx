@@ -12,7 +12,7 @@ const Footer = () => {
           {/* Center - Navigation Links */}
           <HStack spacing={4} display={{ base: "none", md: "flex" }}>
             <Link href="/dashboard" _hover={{ textDecoration: "underline" }}>Dashboard</Link>
-            
+            <Link href="/transactions" _hover={{ textDecoration: "underline" }}>Transaction</Link>
             <Link href="/report" _hover={{ textDecoration: "underline" }}>Report</Link>
           </HStack>
 

@@ -1,23 +1,19 @@
 import React from "react";
 import { Stat, StatLabel, StatNumber, StatHelpText, Box, Stack, Icon } from "@chakra-ui/react";
-import { FaMoneyBillWave, FaPiggyBank, FaArrowUp, FaArrowDown, FaDollarSign } from "react-icons/fa"; // Import icons
+import { FaMoneyBillWave, FaPiggyBank, FaArrowUp, FaArrowDown, FaDollarSign } from "react-icons/fa";
 
-// Format currency function
 const formatCurrency = (value: number) => new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(value);
 
-// Calculate percentage change from previous value
 const calculateChange = (current: number, previous: number) => {
   if (previous === 0) return { change: "N/A", message: "No previous data" };
   return { change: ((current - previous) / previous) * 100, message: null };
 };
 
-// Get the change icon based on the percentage change
 const getChangeIcon = (change: number | string) => {
-  if (typeof change === "string") return null; // No icon for "N/A"
+  if (typeof change === "string") return null;
   return change > 0 ? <Icon as={FaArrowUp} color="green.500" /> : <Icon as={FaArrowDown} color="red.500" />;
 };
 
-// Reusable Stat Card Component
 interface StatCardProps {
   label: string;
   icon: React.ElementType;
@@ -90,3 +86,24 @@ const ExpenseStats: React.FC<ExpenseStatsProps> = ({ expenses = [], prevExpenses
 };
 
 export default ExpenseStats;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

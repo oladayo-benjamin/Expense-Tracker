@@ -1,20 +1,12 @@
-import {
-  Box,
-  Flex,
-  HStack,
-  IconButton,
-  Avatar,
-  Button,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
-  useDisclosure,
-  VStack,
-  Collapse
-} from "@chakra-ui/react";
+import { Box, Flex, HStack, IconButton, Avatar, Button, Menu, MenuButton, MenuList, MenuItem, useDisclosure, VStack, Collapse } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 import { Link } from "react-router-dom";
+
+const navLinks = [
+  { path: "/report", label: "Report" },
+  { path: "/transactions", label: "Transaction" },
+  // Add more links here
+];
 
 const Navbar = () => {
   const { isOpen, onToggle } = useDisclosure();
@@ -22,7 +14,6 @@ const Navbar = () => {
   return (
     <Box position="fixed" top="0" w="full" zIndex="1000" bg="blue.600" shadow="md">
       <Flex h={14} alignItems="center" px={4} justifyContent="space-between">
-        {/* Mobile Menu Button */}
         <IconButton
           display={{ base: "flex", md: "none" }}
           icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
@@ -31,20 +22,16 @@ const Navbar = () => {
           color="white"
           aria-label="Toggle Menu"
         />
-
-        {/* Left - Dashboard */}
         <Button as={Link} to="/dashboard" variant="link" color="white" fontWeight="bold" fontSize="lg">
           Dashboard
         </Button>
-
-        {/* Center - Navigation Links (Hidden on Mobile) */}
         <HStack spacing={6} display={{ base: "none", md: "flex" }}>
-          
-          <Button as={Link} to="/report" variant="link" color="white">Report</Button>
-         
+          {navLinks.map((link) => (
+            <Button key={link.path} as={Link} to={link.path} variant="link" color="white">
+              {link.label}
+            </Button>
+          ))}
         </HStack>
-
-        {/* Right - User Avatar */}
         <Menu>
           <MenuButton as={Button} rounded="full" variant="link" cursor="pointer">
             <Avatar size="sm" name="User" src="https://bit.ly/broken-link" />
@@ -56,14 +43,14 @@ const Navbar = () => {
           </MenuList>
         </Menu>
       </Flex>
-
-      {/* Mobile Menu - Collapsible */}
       <Collapse in={isOpen} animateOpacity>
         <Box pb={4} display={{ md: "none" }} bg="blue.700">
           <VStack spacing={4} alignItems="center">
-            
-            <Button as={Link} to="/report" variant="link" color="white" w="full">Report</Button>
-            
+            {navLinks.map((link) => (
+              <Button key={link.path} as={Link} to={link.path} variant="link" color="white" w="full">
+                {link.label}
+              </Button>
+            ))}
           </VStack>
         </Box>
       </Collapse>
@@ -72,3 +59,13 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+
+
+
+
+
+
+
+
+

@@ -1,4 +1,7 @@
-import { Box, Heading, Text, SimpleGrid } from "@chakra-ui/react"; // Removed unused import VStack
+
+
+
+import { Box, Heading, Text, SimpleGrid } from "@chakra-ui/react"; 
 import { Pie, Bar } from "react-chartjs-2";
 import "chart.js/auto";
 import { Link } from "react-router-dom";

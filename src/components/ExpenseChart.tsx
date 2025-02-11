@@ -1,9 +1,8 @@
 import { FC, useState } from "react";
-import { Box, SimpleGrid, Input, Button, Text, HStack, VStack } from "@chakra-ui/react";
+import { Box, SimpleGrid, Input, Button, Text, HStack, VStack, useToast } from "@chakra-ui/react";
 import { Bar, Doughnut, PolarArea } from "react-chartjs-2";
 import 'chart.js/auto';
 
-// Define Expense type consistently with date as string
 interface Expense {
   id: number;
   amount: number;
@@ -12,35 +11,53 @@ interface Expense {
 }
 
 interface ExpenseChartProps {
-  expenses: Expense[]; // Type expenses as an array of Expense
+  expenses: Expense[];
 }
 
 const ExpenseChart: FC<ExpenseChartProps> = ({ expenses }) => {
   const [budget, setBudget] = useState<number>(1000);
   const [newBudget, setNewBudget] = useState<string>("");
+  const toast = useToast();
 
   const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
   const availableBalance = budget - totalExpenses;
 
   const handleBudgetUpdate = () => {
-    if (newBudget.trim() && !isNaN(Number(newBudget))) {
-      setBudget(parseFloat(newBudget));
-      setNewBudget("");
+    const parsedBudget = parseFloat(newBudget);
+    if (isNaN(parsedBudget)) {
+      toast({
+        title: "Invalid Budget",
+        description: "Please enter a valid number.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
     }
+    if (parsedBudget < 0) {
+      toast({
+        title: "Invalid Budget",
+        description: "Budget cannot be negative.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+    setBudget(parsedBudget);
+    setNewBudget("");
   };
 
   const handleBudgetDelete = () => {
     setBudget(0);
   };
 
-  // Utility to check if the expense date is within a certain number of days
   const isWithinDays = (date: string, days: number) =>
     new Date(date) >= new Date(Date.now() - days * 86400000);
 
   const dailyExpenses = expenses.filter(e => isWithinDays(e.date, 1));
   const weeklyExpenses = expenses.filter(e => isWithinDays(e.date, 7));
 
-  // Group expenses by category
   const groupByCategory = (data: Expense[]) => {
     return data.reduce<Record<string, number>>((acc, expense) => {
       acc[expense.category] = (acc[expense.category] || 0) + expense.amount;
@@ -116,3 +133,4 @@ const ExpenseChart: FC<ExpenseChartProps> = ({ expenses }) => {
 };
 
 export default ExpenseChart;
+

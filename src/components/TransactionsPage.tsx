@@ -1,7 +1,7 @@
-import { Box, Heading, Stack, Text } from "@chakra-ui/react";
-import { Link } from "react-router-dom"; // For navigation
+import { Box, Heading, Stack, Text, HStack, Button } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import React, { useState } from 'react';
 
-// Define types for the expense object and props
 interface Expense {
   id: number;
   description: string;
@@ -15,12 +15,19 @@ interface TransactionsPageProps {
 }
 
 const TransactionsPage: React.FC<TransactionsPageProps> = ({ expenses }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = expenses.slice(indexOfFirstItem, indexOfLastItem);
+
   return (
     <Box p={5}>
       <Heading size="lg" mb={4}>All Transactions</Heading>
-      {expenses.length > 0 ? (
+      {currentItems.length > 0 ? (
         <Stack spacing={4}>
-          {expenses.map((expense: Expense) => (
+          {currentItems.map((expense) => (
             <Box key={expense.id} p={4} border="1px solid #ddd" borderRadius="md" bg="white" boxShadow="sm">
               <Text fontSize="md">{expense.description}</Text>
               <Text fontSize="lg" fontWeight="bold">${expense.amount.toFixed(2)}</Text>
@@ -32,7 +39,14 @@ const TransactionsPage: React.FC<TransactionsPageProps> = ({ expenses }) => {
       ) : (
         <Text>No transactions found.</Text>
       )}
-      {/* Back Link */}
+      <HStack mt={4} justifyContent="center">
+        <Button onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))} isDisabled={currentPage === 1}>
+          Previous
+        </Button>
+        <Button onClick={() => setCurrentPage((prev) => prev + 1)} isDisabled={indexOfLastItem >= expenses.length}>
+          Next
+        </Button>
+      </HStack>
       <Link to="/">
         <Text color="blue.500" mt={4}>Back to Overview</Text>
       </Link>
@@ -41,3 +55,6 @@ const TransactionsPage: React.FC<TransactionsPageProps> = ({ expenses }) => {
 };
 
 export default TransactionsPage;
+
+
+
