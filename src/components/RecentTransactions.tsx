@@ -60,7 +60,7 @@ const RecentTransactions: React.FC<RecentTransactionsProps> = ({ expenses }) => 
           <Text color="gray.500">No recent transactions. Start adding your expenses!</Text>
         </HStack>
       )}
-      <Link to="/Tra">
+      <Link to="/transactions">
         <Box display="flex" justifyContent="center">
           <Button variant="solid" colorScheme="blue" mt={4} size="xs">
             View All
