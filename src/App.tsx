@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ArrowUpIcon } from "@chakra-ui/icons";
 import Navbar from "./components/Navbar";
 import ExpenseForm from "./components/ExpenseForm";
-import ExpenseTable from "./components/ExpenseTable";
+
 import ExpenseStats from "./components/ExpenseStats";
 import ExpenseChart from "./components/ExpenseChart";
 import RecentTransactions from "./components/RecentTransactions";
@@ -96,15 +96,13 @@ const App: FC = () => {
             <Heading mb={4} textAlign="left" size={{ base: "md", md: "lg" }} mt="3">Recent Transactions</Heading>
             <Box bg="white" p={{ base: 3, md: 5 }} borderRadius="lg" boxShadow="md" mt={4}><RecentTransactions expenses={expenses} /></Box>
             <Routes>
-              <Route path="/transactions" element={<TransactionsPage expenses={expenses} />} />
-              <Route path="/report" element={<ReportPage expenses={expenses} />} />
+             <Route path="/transactions" element={<TransactionsPage expenses={expenses} updateExpense={updateExpense} deleteExpense={deleteExpense} />} />
+             <Route path="/report" element={<ReportPage expenses={expenses} />} />
             </Routes>
             <Heading mb={4} textAlign="left" size={{ base: "md", md: "lg" }} mt="5">Budget & Stats</Heading>
             <Box bg="white" p={{ base: 3, md: 5 }} borderRadius="lg" boxShadow="md" mt={4}><ExpenseChart expenses={expenses} /></Box>
             <Heading mb={4} textAlign="left" size={{ base: "md", md: "lg" }} mt="5">Add Expense</Heading>
             <Box bg="white" p={{ base: 3, md: 5 }} borderRadius="lg" boxShadow="md" mt={4}><Stack spacing={4} mb={4}><ExpenseForm addExpense={addExpense} /></Stack></Box>
-            <Heading mb={4} textAlign="left" size={{ base: "md", md: "lg" }} mt="3">Modify Expense</Heading>
-            <Box bg="white" p={{ base: 3, md: 5 }} borderRadius="lg" boxShadow="md" mt={4}><ExpenseTable expenses={expenses} updateExpense={updateExpense} deleteExpense={deleteExpense} /></Box>
           </Box>
           <Box bg="gray.50" pt="30px" w="100%" p={{ base: "10px", md: "30px" }} mt="auto">
             <Footer />
